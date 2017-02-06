@@ -1,11 +1,20 @@
 {
   "name": "image-irc",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "description": "upload images, post to irc",
   "main": "index.js",
+  "bin": { 
+      "imgirc" : "./index.js" 
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+     "irc",
+     "sharing",
+     "image"
+  ],
+  "repository": "https://github.com/GeneralUnRest/imageshare-irc.git",
   "author": "prussian <genunrest@gmail.com>",
   "license": "ISC",
   "dependencies": {

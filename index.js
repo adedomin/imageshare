@@ -15,16 +15,25 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+var argv = require('yargs')
+    .usage('usage: $0 [init] [-c --config] config_path')
+    .command('init [path]', 'create default configuration in home folder or optional path')
+    .example('$0 init', 'write default config to home folder as .img-irc.js or as .config/imageshare-irc.js if XDG_CONFIG_HOME is defined')
+    .example('$0 -c ./config.js & disown', 'start server, run in background')
+    .describe('c', 'config path')
+    .alias('c', 'config')
+    .help('h')
+    .alias('h', 'help')
+    .argv
+
 var fs = require('fs'), 
     path = require('path'),
-    argv = require('yargs').argv,
     configpath = ''
 
 if (process.env.XDG_CONFIG_HOME)
     configpath = path.join(process.env.XDG_CONFIG_HOME, 'imageshare-irc.js')
 else if (process.env.HOME)
     configpath = path.join(process.env.HOME, '.img-irc.js')
-
 
 if (argv._[0] == 'init') {
     return fs.createReadStream(
@@ -34,7 +43,7 @@ if (argv._[0] == 'init') {
     ))
 }
 
-var config = require(argv.config || argv.c || configpath),
+var config = require(argv.c || configpath),
     express = require('express'),
     file_type = require('file-type'),
     rate_lim = require('express-rate-limit'),
