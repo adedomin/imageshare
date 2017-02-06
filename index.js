@@ -57,7 +57,7 @@ var config = require(argv.c || configpath),
 if (!config.storage.dir) throw 'You must define a storage directory'
 
 // current latest file
-var curr = (+fs.readdirSync(config.storage.dir).sort((a,b) => +a < +b)[0] + 1) % files_limit || 0
+var curr = (+fs.readdirSync(config.storage.dir).sort((a,b) => +b - +a)[0] + 1) % files_limit || 0
 
 if (config.reverse_proxied) app.enable('trust proxy')
 
