@@ -126,15 +126,48 @@ app.get('/', (req, res) => {
     res.end(`
         <!DOCTYPE html>
         <html>
-        <head><title>Upload an Image</title></head>
+        <head>
+            <title>Upload an Image</title>
+
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css" crossorigin="anonymous">
+            <style>
+                #file {
+                      height: 100px;
+                }
+            </style>
+        </head>
         <body>
-        <form action="/upload" enctype="multipart/form-data" method="post">
-        <input type="file" name="upload"><br>
-        <input type="submit" value="Upload">
-        </form>
+            
+            <section class="hero is-primary">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">
+                            Share Images with IRC
+                        </h1>
+                        <h2 class="subtitle">
+                            ${config.irc.client.channels.join(', ')} on ${config.irc.server}
+                        </h2>
+                    </div>
+                </div>
+            </section>
+            <br>
+            <section class="section">
+                <div class="container">
+                    <form action="/upload" enctype="multipart/form-data" method="post">
+                        <label class="label">Upload an Image</label>
+                        <p class="control">
+                            <input id="file" class="input" type="file" name="upload"><br>
+                        </p>
+                        <p class="control">
+                            <input class="button is-primary" type="submit" value="Upload">
+                        </p>
+                    </form>
+                </div>
+            </section>
         </body>
         </html>
-        `)
+    `)
 })
 
 app.listen(config.port || 5657)
