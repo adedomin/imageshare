@@ -1,0 +1,21 @@
+{
+  "name": "image-irc",
+  "version": "1.0.0",
+  "description": "upload images, post to irc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "prussian <genunrest@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "busboy": "^0.2.14",
+    "circular-buffer": "^1.0.2",
+    "express": "^4.14.1",
+    "express-rate-limit": "^2.6.0",
+    "file-type": "^4.1.0",
+    "irc": "^0.5.2",
+    "read-chunk": "^2.0.0",
+    "yargs": "^6.6.0"
+  }
+}
