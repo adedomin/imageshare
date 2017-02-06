@@ -21,9 +21,9 @@ var fs = require('fs'),
     configpath = ''
 
 if (process.env.XDG_CONFIG_HOME)
-    configpath = path.join(process.env.XDG_CONFIG_HOME, 'img-irc.js')
+    configpath = path.join(process.env.XDG_CONFIG_HOME, 'imageshare-irc.js')
 else if (process.env.HOME)
-    configpath = path.join(process.env.HOME, 'img-irc.js')
+    configpath = path.join(process.env.HOME, '.img-irc.js')
 
 
 if (argv._[0] == 'init') {
@@ -42,13 +42,13 @@ var config = require(argv.config || argv.c || configpath),
     read_chunk = require('read-chunk'),
     files_limit = config.storage.file_lim || 100,
     IrcClient = require('irc').Client,
-    irc = new IrcClient(config.irc.server, config.irc.nick, config.irc.client)
+    irc = new IrcClient(config.irc.server, config.irc.nick, config.irc.client),
     app = express()
 
 if (!config.storage.dir) throw 'You must define a storage directory'
 
 // current latest file
-var curr = (+fs.readdirSync(config.storage.dir).sort((a,b) => +a < +b)[0] + 1)% files_limit || 0
+var curr = (+fs.readdirSync(config.storage.dir).sort((a,b) => +a < +b)[0] + 1) % files_limit || 0
 
 if (config.reverse_proxied) app.enable('trust proxy')
 
@@ -64,14 +64,14 @@ app.post('/upload', (req, res) => {
     var busboy = new Busboy({ 
         headers: req.headers,
         limits: {
-            fileSize: config.storage.max_size || (1024**2)*10,
+            fileSize: config.storage.max_size || (1024*1024)*10,
             files: 1
         }
     })
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         if (mimetype.indexOf('image') != 0) {
             res.status(500)
-            return res.end({
+            return res.send({
                 status: 'error',
                 msg: 'not an image'
             })
@@ -79,9 +79,9 @@ app.post('/upload', (req, res) => {
         file.pipe(fs.createWriteStream(
             path.join(config.storage.dir, ''+curr)
         )).on('finish', () => {
-            res.redirect('/uploads/'+curr)
+            res.redirect('/'+curr)
             config.irc.client.channels.forEach(channel => {
-                irc.say(channel, `new image -> ${config.irc.url}/uploads/${curr}`)
+                irc.say(channel, `new image -> ${config.irc.url}/${curr}`)
             })
             curr = (curr + 1) % files_limit
         }) 
@@ -89,42 +89,34 @@ app.post('/upload', (req, res) => {
     req.pipe(busboy)
 })
 
-app.get('/uploads/:file', (req, res) => {
-    if (req.params.file.indexOf('/') > -1) {
-        res.status(500)
-        res.end({
+app.get('/:file', (req, res) => {
+    if (isNaN(+req.params.file)) {
+        res.status(404)
+        return res.send({
             status: 'error',
-            msg: 'can\'t contain forward slashes (/)'
+            msg: 'no such file'
         })
     }
     res.type(file_type(read_chunk.sync(
         path.join(config.storage.dir, req.params.file), 0, 4100
     )).ext)
-    fs.createReadStream(
-        path.join(config.storage.dir, req.params.file)
-    ).pipe(res).on('error', (err) => {
-        res.status(500)
-        res.end({
-            status: 'error',
-            msg: err 
-        })
-    })
+    res.sendFile(path.join(config.storage.dir, req.params.file))
 }) 
 
 app.get('/', (req, res) => {
-  res.type('html')
-  res.end(`
-    <!DOCTYPE html>
-    <html>
-    <head><title>upload an image fam</title></head>
-    <body>
-    <form action="/upload" enctype="multipart/form-data" method="post">
-    <input type="file" name="upload"><br>
-    <input type="submit" value="Upload">
-    </form>
-    </body>
-    </html>
-  `)
+    res.type('html')
+    res.end(`
+        <!DOCTYPE html>
+        <html>
+        <head><title>Upload an Image</title></head>
+        <body>
+        <form action="/upload" enctype="multipart/form-data" method="post">
+        <input type="file" name="upload"><br>
+        <input type="submit" value="Upload">
+        </form>
+        </body>
+        </html>
+        `)
 })
 
 app.listen(config.port || 5657)

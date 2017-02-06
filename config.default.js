@@ -3,7 +3,8 @@ var config = {
     upload_delay_ms: 2000,
     reverse_proxied: true,
     storage: {
-        max_size: (1024**2)*10,
+        // 10MiB
+        max_size: (1024*1024)*10,
         // where to save images
         dir: '/tmp/uploads',
         // number of files to retain
@@ -11,8 +12,10 @@ var config = {
     },
     port: 5657,
     irc: {
+        server: 'irc.rizon.net',
+        nick: 'ImageIRC',
         client: {
-            userName: 'ImageShare',
+            userName: 'ImageIRC',
             realName: 'bot',
             port: 6697,
             autoConnect: true,
@@ -24,9 +27,8 @@ var config = {
             stripColors: true,
             messageSplit: 512,
         },
-        url: 'https://home.dedominic.pw:5657',
-        server: 'irc.rizon.net',
-        nick: 'ImageIRC-share'
+        // the url where users can fetch content
+        url: 'http://localhost:5657'
     }
 }
 
