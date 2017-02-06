@@ -1,6 +1,7 @@
 var config = {
     // how many uploads allowed per ms
     upload_delay_ms: 2000,
+    reverse_proxied: true,
     storage: {
         max_size: (1024**2)*10,
         // where to save images

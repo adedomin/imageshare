@@ -50,7 +50,7 @@ if (!config.storage.dir) throw 'You must define a storage directory'
 // current latest file
 var curr = (+fs.readdirSync(config.storage.dir).sort((a,b) => +a < +b)[0] + 1)% files_limit || 0
 
-app.enable('trust proxy')
+if (config.reverse_proxied) app.enable('trust proxy')
 
 var limit = new rate_lim({
     windowMs: config.upload_delay_ms || 2000, 
