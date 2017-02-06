@@ -97,9 +97,18 @@ app.get('/:file', (req, res) => {
             msg: 'no such file'
         })
     }
-    res.type(file_type(read_chunk.sync(
-        path.join(config.storage.dir, req.params.file), 0, 4100
-    )).ext)
+    try {
+        res.type(file_type(read_chunk.sync(
+            path.join(config.storage.dir, req.params.file), 0, 4100
+        )).ext)
+    }
+    catch (e) {
+        res.status(404)
+        return res.send({
+            status: 'error',
+            msg: 'no such file'
+        })
+    }
     res.sendFile(path.join(config.storage.dir, req.params.file))
 }) 
 
