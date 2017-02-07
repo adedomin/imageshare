@@ -80,12 +80,13 @@ app.post('/upload', (req, res) => {
         headers: req.headers,
         limits: {
             fileSize: config.storage.max_size || (1024*1024)*10,
-            files: 1
+            files: 1,
+            fieldSize: 300,
+            fields: 2
         }
     })
     busboy.on('field', (field, value) => {
-        if (field == 'upload') return
-        else if (field == 'caption' 
+        if (field == 'caption' 
             && (value != '')) caption = value
         else if (field == 'channel'
             && (value != '')) channel = value
@@ -149,7 +150,7 @@ var index = `
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css" crossorigin="anonymous">
   <style>
     #file {
-          height: 100px;
+      height: 100px;
     }
   </style>
 </head>
