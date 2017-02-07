@@ -54,6 +54,11 @@ var config = require(argv.c || configpath),
     irc = new IrcClient(config.irc.server, config.irc.nick, config.irc.client),
     app = express()
 
+// error events kill the stupid bot otherwise
+irc.addListener('error', function(message) {
+    console.error('*** IRC ERR ***', message)
+})
+
 if (!config.storage.dir) throw 'You must define a storage directory'
 
 // current latest file
@@ -70,12 +75,20 @@ var limit = new rate_lim({
 app.use('/upload', limit)
 
 app.post('/upload', (req, res) => {
+    var caption = 'new image', channel = ''
     var busboy = new Busboy({ 
         headers: req.headers,
         limits: {
             fileSize: config.storage.max_size || (1024*1024)*10,
             files: 1
         }
+    })
+    busboy.on('field', (field, value) => {
+        if (field == 'upload') return
+        else if (field == 'caption' 
+            && (value != '')) caption = value
+        else if (field == 'channel'
+            && (value != '')) channel = value
     })
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         if (mimetype.indexOf('image') != 0) {
@@ -88,10 +101,15 @@ app.post('/upload', (req, res) => {
         file.pipe(fs.createWriteStream(
             path.join(config.storage.dir, ''+curr)
         )).on('finish', () => {
-            res.redirect('/'+curr)
-            config.irc.client.channels.forEach(channel => {
-                irc.say(channel, `new image -> ${config.irc.url}/${curr}`)
-            })
+            res.redirect('/')
+            if (channel != '-ALL-' && channel != '') {
+                irc.say(channel, `${caption} -> ${config.irc.url}/${curr}`)
+            }
+            else {
+                config.irc.client.channels.forEach(channel => {
+                    irc.say(channel, `${caption} -> ${config.irc.url}/${curr}`)
+                })
+            }
             curr = (curr + 1) % files_limit
         }) 
     })
@@ -121,53 +139,67 @@ app.get('/:file', (req, res) => {
     res.sendFile(path.join(config.storage.dir, req.params.file))
 }) 
 
+var index = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload an Image</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css" crossorigin="anonymous">
+  <style>
+    #file {
+          height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Share Images with IRC
+        </h1>
+        <h2 class="subtitle">
+          ${config.irc.client.channels.join(', ')} on ${config.irc.server}
+        </h2>
+      </div>
+    </div>
+  </section>
+  <br>
+  <section class="section">
+    <div class="container">
+      <form action="/upload" enctype="multipart/form-data" method="post">
+        <label class="label">Caption</label>
+        <p class="control">
+          <input class="input" type="text" name="caption"><br>
+        </p>
+        <label class="label">Send to</label>
+        <p class="control"><span class="select">
+          <select name="channel">
+            <option value="-ALL-" selected>All channels</option>
+            ${config.irc.client.channels.map(channel => {
+                return `<option value="${channel}">${channel}</option>` 
+            })}
+          </select>
+        </span></p>
+        <label class="label">Upload an Image</label>
+        <p class="control">
+          <input id="file" class="input" type="file" name="upload"><br>
+        </p>
+        <p class="control">
+          <input class="button is-primary" type="submit" value="Upload">
+        </p>
+      </form>
+    </div>
+  </section>
+</body>
+</html>
+`
+
 app.get('/', (req, res) => {
     res.type('html')
-    res.end(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Upload an Image</title>
-
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css" crossorigin="anonymous">
-            <style>
-                #file {
-                      height: 100px;
-                }
-            </style>
-        </head>
-        <body>
-            
-            <section class="hero is-primary">
-                <div class="hero-body">
-                    <div class="container">
-                        <h1 class="title">
-                            Share Images with IRC
-                        </h1>
-                        <h2 class="subtitle">
-                            ${config.irc.client.channels.join(', ')} on ${config.irc.server}
-                        </h2>
-                    </div>
-                </div>
-            </section>
-            <br>
-            <section class="section">
-                <div class="container">
-                    <form action="/upload" enctype="multipart/form-data" method="post">
-                        <label class="label">Upload an Image</label>
-                        <p class="control">
-                            <input id="file" class="input" type="file" name="upload"><br>
-                        </p>
-                        <p class="control">
-                            <input class="button is-primary" type="submit" value="Upload">
-                        </p>
-                    </form>
-                </div>
-            </section>
-        </body>
-        </html>
-    `)
+    res.send(index)
 })
 
 app.listen(config.port || 5657)
