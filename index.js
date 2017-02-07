@@ -171,18 +171,17 @@ var index = `
     <div class="container">
       <form action="/upload" enctype="multipart/form-data" method="post">
         <label class="label">Caption</label>
-        <p class="control">
-          <input class="input" type="text" name="caption"><br>
+        <p class="control has-addons">
+          <span class="select">
+            <select name="channel">
+              <option value="-ALL-" selected>All channels</option>
+              ${config.irc.client.channels.map(channel => {
+                  return `<option value="${channel}">${channel}</option>` 
+              })}
+            </select>
+          </span>
+          <input class="input is-expanded" type="text" name="caption"><br>
         </p>
-        <label class="label">Send to</label>
-        <p class="control"><span class="select">
-          <select name="channel">
-            <option value="-ALL-" selected>All channels</option>
-            ${config.irc.client.channels.map(channel => {
-                return `<option value="${channel}">${channel}</option>` 
-            })}
-          </select>
-        </span></p>
         <label class="label">Upload an Image</label>
         <p class="control">
           <input id="file" class="input" type="file" name="upload"><br>
