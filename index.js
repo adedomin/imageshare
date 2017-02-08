@@ -99,6 +99,15 @@ app.post('/upload', (req, res) => {
                 msg: 'not an image'
             })
         }
+
+        file.on('limit', () => {
+            req.unpipe(busboy)
+            res.writeHead(500, { 'Connection': 'close' })
+            res.end(JSON.stringify({
+                status: 'error',
+                msg: 'request to large'
+            }))
+        })
         file.pipe(fs.createWriteStream(
             path.join(config.storage.dir, ''+curr)
         )).on('finish', () => {
