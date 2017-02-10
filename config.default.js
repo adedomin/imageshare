@@ -26,7 +26,7 @@ var config = {
             sasl: false,
             stripColors: true,
             messageSplit: 512,
-        },
+        }
     }
 }
 

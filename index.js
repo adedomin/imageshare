@@ -116,11 +116,11 @@ app.post('/upload', (req, res) => {
         )).on('finish', () => {
             res.redirect('/')
             if (channel != '-ALL-' && channel != '') {
-                irc.say(channel, `${caption} -> ${req.hostname}/${curr}`)
+                irc.say(channel, `${caption} -> ${req.protocol}://${req.get('host')}/${curr}`)
             }
             else {
                 config.irc.client.channels.forEach(channel => {
-                    irc.say(channel, `${caption} -> ${config.irc.url}/${curr}`)
+                    irc.say(channel, `${caption} -> ${req.protocol}://${req.get('host')}/${curr}`)
                 })
             }
             curr = (curr + 1) % files_limit
