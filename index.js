@@ -64,7 +64,7 @@ if (!config.storage.dir) throw 'You must define a storage directory'
 // current latest file
 var curr = (+fs.readdirSync(config.storage.dir).sort((a,b) => +b - +a)[0] + 1) % files_limit || 0
 
-if (config.reverse_proxied) app.enable('trust proxy')
+if (config.reverse_proxied) app.set('trust proxy', true)
 
 var limit = new rate_lim({
     windowMs: config.upload_delay_ms || 2000, 
@@ -93,7 +93,9 @@ app.post('/upload', (req, res) => {
     })
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         if (mimetype.indexOf('image') != 0) {
+            req.unpipe(busboy)
             res.status(500)
+            res.set('Connection', 'close')
             return res.send({
                 status: 'error',
                 msg: 'not an image'
@@ -102,18 +104,19 @@ app.post('/upload', (req, res) => {
 
         file.on('limit', () => {
             req.unpipe(busboy)
-            res.writeHead(500, { 'Connection': 'close' })
-            res.end(JSON.stringify({
+            res.status(500)
+            res.set('Connection', 'close')
+            res.send({
                 status: 'error',
                 msg: 'request to large'
-            }))
+            })
         })
         file.pipe(fs.createWriteStream(
             path.join(config.storage.dir, ''+curr)
         )).on('finish', () => {
             res.redirect('/')
             if (channel != '-ALL-' && channel != '') {
-                irc.say(channel, `${caption} -> ${config.irc.url}/${curr}`)
+                irc.say(channel, `${caption} -> ${req.hostname}/${curr}`)
             }
             else {
                 config.irc.client.channels.forEach(channel => {
