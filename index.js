@@ -74,6 +74,16 @@ var limit = new rate_lim({
 
 app.use('/upload', limit)
 
+var req_fail = (req, res, msg, busboy) => {
+    req.unpipe(busboy)
+    res.status(500)
+    res.set('Connection', 'close')
+    return res.send({
+        status: 'error',
+        msg: msg
+    })
+}
+
 app.post('/upload', (req, res) => {
     var caption = 'new image', channel = ''
     var busboy = new Busboy({ 
@@ -87,29 +97,27 @@ app.post('/upload', (req, res) => {
     })
     busboy.on('field', (field, value) => {
         if (field == 'caption' 
-            && (value != '')) caption = value
-        else if (field == 'channel'
-            && (value != '')) channel = value
+            && (value != '')) {
+
+            caption = value
+        }
+        else if (field == 'channel' 
+            && (value != '')) {
+            
+            channel = value
+            if (channel != '-ALL-' && config.irc.client.channels.indexOf(channel) < 0) {
+                req_fail(req, res, 'channel not in list', busboy)
+            }
+        }
     })
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
-        if (mimetype.indexOf('image') != 0) {
-            req.unpipe(busboy)
-            res.status(500)
-            res.set('Connection', 'close')
-            return res.send({
-                status: 'error',
-                msg: 'not an image'
-            })
+        if (mimetype.indexOf('image') != 0 
+            && mimetype.indexOf('video') != 0) {
+            return req_fail(req, res, 'not a video or image', busboy)
         }
 
         file.on('limit', () => {
-            req.unpipe(busboy)
-            res.status(500)
-            res.set('Connection', 'close')
-            res.send({
-                status: 'error',
-                msg: 'request to large'
-            })
+            req_fail(req, res, 'request too large', busboy)
         })
         file.pipe(fs.createWriteStream(
             path.join(config.storage.dir, ''+curr)
