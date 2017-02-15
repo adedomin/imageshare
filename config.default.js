@@ -11,6 +11,7 @@ var config = {
         file_lim: 100
     },
     port: 5657,
+    interface: '127.0.0.1', // leaven as null to bind to all
     irc: {
         server: 'irc.rizon.net',
         nick: 'ImageIRC',
