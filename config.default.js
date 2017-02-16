@@ -18,7 +18,6 @@ var config = {
         nickserv_pass: '',
         client: {
             port: 6697,
-            autoConnect: true,
             channels: ['#prussian'],
             secure: true,
             floodProtection: true,
