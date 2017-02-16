@@ -15,8 +15,9 @@ var config = {
     irc: {
         server: 'irc.rizon.net',
         nick: 'ImageIRC',
-        nickserv_pass: '',
+        nickserv_pass: 'ImageIrc_pass_a10',
         client: {
+            autoConnect: true,
             port: 6697,
             channels: ['#prussian'],
             secure: true,

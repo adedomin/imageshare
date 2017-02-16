@@ -54,16 +54,16 @@ var config = require(argv.c || configpath),
     irc = new IrcClient(config.irc.server, config.irc.nick, config.irc.client),
     app = express()
 
-irc.connect(() => {
+// error events kill the stupid bot otherwise
+irc.addListener('error', (message) => {
+    console.error('*** IRC ERR ***', message)
+})
+
+irc.addListener('registered', () => {
     // if ident
     if (config.irc.nickserv_pass && config.irc.nickserv_pass != '') {
         irc.say('NickServ', `IDENTIFY ${config.irc.nickserv_pass}`)
     }
-})
-
-// error events kill the stupid bot otherwise
-irc.addListener('error', function(message) {
-    console.error('*** IRC ERR ***', message)
 })
 
 
