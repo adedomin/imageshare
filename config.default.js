@@ -15,18 +15,14 @@ var config = {
     irc: {
         server: 'irc.rizon.net',
         nick: 'ImageIRC',
+        nickserv_pass: '',
         client: {
-            userName: 'ImageIRC',
-            realName: 'bot',
             port: 6697,
             autoConnect: true,
             channels: ['#prussian'],
             secure: true,
             floodProtection: true,
-            floodProtectionDelay: 300,
-            sasl: false,
-            stripColors: true,
-            messageSplit: 512,
+            floodProtectionDelay: 300
         }
     }
 }

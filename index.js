@@ -59,6 +59,11 @@ irc.addListener('error', function(message) {
     console.error('*** IRC ERR ***', message)
 })
 
+// if ident
+if (config.irc.nickserv_pass && config.irc.nickserv_pass != '') {
+    irc.say('NickServ', `IDENTIFY ${config.irc.nickserv_pass}`)
+}
+
 if (!config.storage.dir) throw 'You must define a storage directory'
 
 // current latest file
