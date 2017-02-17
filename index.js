@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /*
  * Copyright (c) 2017, prussian <genunrest@gmail.com>
  *
