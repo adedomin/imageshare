@@ -1,10 +1,10 @@
 {
   "name": "image-irc",
-  "version": "1.2.1-alpha",
+  "version": "2.0.0-RW",
   "description": "upload images, post to irc",
   "main": "index.js",
   "bin": { 
-      "imgirc" : "./index.js" 
+      "imgirc" : "./bin/imgirc.js" 
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
