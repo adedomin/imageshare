@@ -37,7 +37,7 @@ else if (process.env.HOME)
 
 if (argv._[0] == 'init') {
     return fs.createReadStream(
-        path.join(__dirname, 'config.default.js')
+        path.join(__dirname, '../', 'config.default.js')
     ).pipe(fs.createWriteStream(
         argv._[1] || configpath
     ))
