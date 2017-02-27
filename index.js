@@ -29,8 +29,6 @@ module.exports = (argv) => {
         irc = ircClient(config),
         web = new Web(config, storage)
 
-    storage.init()
-
     web.on('new', (channel, msg) => {
         if (channel != '-ALL-') {
             irc.say(channel, msg)
