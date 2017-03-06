@@ -11,7 +11,9 @@ var config = {
         file_lim: 100
     },
     port: 5657,
-    interface: null, // leaven as null to bind to all
+    interface: null, // leave as null to bind to all
+    // for help text, lets users know where they can upload images
+    help_url: null,
     irc: {
         server: 'irc.rizon.net',
         nick: 'ImageIRC',
