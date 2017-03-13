@@ -1,6 +1,6 @@
 {
   "name": "image-irc",
-  "version": "2.1.1-noxss",
+  "version": "2.1.2-noxss",
   "description": "upload images, post to irc",
   "main": "index.js",
   "bin": { 
