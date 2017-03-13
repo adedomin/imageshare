@@ -1,18 +1,18 @@
 {
   "name": "image-irc",
-  "version": "2.1.2-noxss",
+  "version": "2.1.3-noxss",
   "description": "upload images, post to irc",
   "main": "index.js",
-  "bin": { 
-      "imgirc" : "./bin/imgirc.js" 
+  "bin": {
+    "imgirc": "./bin/imgirc.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-     "irc",
-     "sharing",
-     "image"
+    "irc",
+    "sharing",
+    "image"
   ],
   "repository": "https://github.com/GeneralUnRest/imageshare-irc.git",
   "author": "prussian <genunrest@gmail.com>",
@@ -22,6 +22,7 @@
     "express": "^4.14.1",
     "express-rate-limit": "^2.6.0",
     "irc": "^0.5.2",
+    "mime-types": "^2.1.14",
     "yargs": "^6.6.0"
   }
 }
