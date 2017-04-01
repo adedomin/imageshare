@@ -1,6 +1,6 @@
 {
   "name": "image-irc",
-  "version": "2.1.4-noxss",
+  "version": "2.2.0-svg",
   "description": "upload images, post to irc",
   "main": "index.js",
   "bin": {
@@ -19,10 +19,13 @@
   "license": "ISC",
   "dependencies": {
     "busboy": "^0.2.14",
+    "dompurify": "^0.8.5",
     "express": "^4.14.1",
     "express-rate-limit": "^2.6.0",
     "file-type": "^4.1.0",
     "irc": "^0.5.2",
+    "is-svg": "^2.1.0",
+    "jsdom": "^9.12.0",
     "mime-types": "^2.1.14",
     "read-chunk": "^2.0.0",
     "yargs": "^6.6.0"
