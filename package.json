@@ -1,6 +1,6 @@
 {
   "name": "image-irc",
-  "version": "2.3.3-RC1",
+  "version": "2.3.3-mv",
   "description": "upload images, post to irc",
   "main": "index.js",
   "bin": {
@@ -14,7 +14,7 @@
     "sharing",
     "image"
   ],
-  "repository": "https://github.com/GeneralUnRest/imageshare-irc.git",
+  "repository": "https://github.com/adedomin/imageshare-irc.git",
   "author": "prussian <genunrest@gmail.com>",
   "license": "ISC",
   "dependencies": {
