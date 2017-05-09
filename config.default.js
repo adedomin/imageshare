@@ -8,7 +8,9 @@ var config = {
         // where to save images
         dir: '/tmp/uploads',
         // number of files to retain
-        file_lim: 100
+        file_lim: 100,
+        // svg's are a bit of a mess to do safely
+        disable_svg: true,
     },
     port: 5657,
     interface: null, // leave as null to bind to all
@@ -24,9 +26,9 @@ var config = {
             channels: ['#prussian'],
             secure: true,
             floodProtection: true,
-            floodProtectionDelay: 300
-        }
-    }
+            floodProtectionDelay: 300,
+        },
+    },
 }
 
 module.exports = config

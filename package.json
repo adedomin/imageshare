@@ -1,6 +1,6 @@
 {
   "name": "image-irc",
-  "version": "2.3.3-mv",
+  "version": "2.3.4-nosvg",
   "description": "upload images, post to irc",
   "main": "index.js",
   "bin": {
