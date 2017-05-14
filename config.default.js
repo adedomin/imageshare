@@ -18,16 +18,11 @@ var config = {
     help_url: null,
     irc: {
         server: 'irc.rizon.net',
-        nick: 'ImageIRC',
+        port: 6697,
+        nick: 'ImageIRC_',
+        tls: true,
         nickserv_pass: '',
-        client: {
-            autoConnect: true,
-            port: 6697,
-            channels: ['#prussian'],
-            secure: true,
-            floodProtection: true,
-            floodProtectionDelay: 300,
-        },
+        channels: ['#prussian'],
     },
 }
 

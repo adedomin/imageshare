@@ -21,7 +21,8 @@ var Storage = require('./lib/storage.js'),
 module.exports = (argv) => {
 
     var config = require(argv.c)
-    if (!config.storage.dir) throw 'You must define a storage directory'
+    if (!config.storage.dir) 
+        throw 'You must define a storage directory'
     var storage = new Storage(
             config.storage.file_lim || 100,
             config.storage.dir
@@ -30,13 +31,6 @@ module.exports = (argv) => {
         web = new Web(config, storage)
 
     web.on('new', (channel, msg) => {
-        if (channel != '-ALL-') {
-            irc.say(channel, msg)
-        }
-        else {
-            config.irc.client.channels.forEach(channel => {
-                irc.say(channel, msg)
-            })
-        }
+        irc.say(channel, msg)
     })
 }
