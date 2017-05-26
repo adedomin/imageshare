@@ -1,6 +1,6 @@
 {
   "name": "image-irc",
-  "version": "2.4.0-newrepo",
+  "version": "2.5.0",
   "description": "upload images, post to irc",
   "main": "index.js",
   "bin": {
@@ -23,6 +23,7 @@
     "express": "^4.14.1",
     "express-rate-limit": "^2.6.0",
     "file-type": "^4.1.0",
+    "hashids": "^1.1.1",
     "irc-framework": "^2.8.1",
     "is-svg": "^2.1.0",
     "jsdom": "^9.12.0",
