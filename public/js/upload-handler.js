@@ -117,12 +117,12 @@ function finishedUpload(el) {
 
 var movingDotPos = -1
 function incrementProgress(el) {
-    movingDotPos = (movingDotPos + 1) % 3
-    var dots = ['.', '.', '.']
+    var dots = ['.', '.', '.', '.', '.', '.', '.']
+    movingDotPos = (movingDotPos + 1) % dots.length
     dots[movingDotPos] = 'o'
 
     if (el.lengthComputable) {
-        setInfo(`Uploading ${dots.join('')} - ${el.loaded / el.total}%`)
+        setInfo(`Uploading ${dots.join('')} - ${Math.floor((el.loaded / el.total)*100)}%`)
     }
     else {
         setInfo(`Uploading ${dots.join('')}`)
@@ -138,7 +138,7 @@ function uploadFile(el) {
         }
         var xhr = new XMLHttpRequest()
         xhr.open('POST', 'upload')
-        xhr.addEventListener('progress', incrementProgress)
+        xhr.upload.addEventListener('progress', incrementProgress)
         xhr.addEventListener('load', finishedUpload)
         xhr.addEventListener('error', finishedUpload)
         xhr.box = createFileBox(file, xhr)
