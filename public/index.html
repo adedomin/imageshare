@@ -6,17 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="ImgIRC - send images to irc">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.2/css/bulma.min.css" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="css/upload-btn.css">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
     <title>ImageIRC</title>
-    <style>
-    #file-field {
-        height: 100px;
-    }
-    html {
-        background-color: #f5f5f5;
-    }
-    </style>
   </head>
   <body>
     <div class="hero is-primary" id="banner-color">
@@ -26,7 +18,7 @@
             Share Images with IRC
           </h1>
           <h2 class="subtitle" id="status-mesg">
-            Drag your files anywhere or use the button
+            Select channels and start uploading
           </h2>
         </div>
       </div>
@@ -42,7 +34,8 @@
         </div>
         <div class="field">
           <p class="control">
-            <input id="file-field" class="input" multiple type="file">
+            <input id="file" class="file-field" name="file" multiple type="file">
+            <label for="file" class="button is-large is-fullwidth has-text-centered file-label">Upload File</label>
           </p>
         </div>
       </div>

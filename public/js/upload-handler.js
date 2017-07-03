@@ -170,5 +170,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     xhr.send()
     document.getElementById('caption-input').onchange = modifyCaption
-    document.getElementById('file-field').onchange = uploadFile
+    document.getElementById('file').onchange = uploadFile
 })
