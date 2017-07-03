@@ -122,7 +122,7 @@ function incrementProgress(el) {
     dots[movingDotPos] = 'o'
 
     if (el.lengthComputable) {
-        setInfo(`Uploading ${dots.join('')} - ${Math.floor((el.loaded / el.total)*100)}%`)
+        setInfo(`Uploading ${dots.join('')} ${Math.floor((el.loaded / el.total)*100)}%`)
     }
     else {
         setInfo(`Uploading ${dots.join('')}`)
