@@ -115,9 +115,18 @@ function finishedUpload(el) {
         .appendChild(xhr.box)
 }
 
+var movingDotPos = -1
 function incrementProgress(el) {
-    if (el.lengthComputable)
-        setInfo(`Uploading... ${Math.floor((el.loaded / el.total))}%`)
+    movingDotPos = (movingDotPos + 1) % 3
+    var dots = ['.', '.', '.']
+    dots[movingDotPos] = 'o'
+
+    if (el.lengthComputable) {
+        setInfo(`Uploading ${dots.join('')} - ${el.loaded / el.total}%`)
+    }
+    else {
+        setInfo(`Uploading ${dots.join('')}`)
+    }
 }
 
 function uploadFile(el) {
@@ -129,7 +138,7 @@ function uploadFile(el) {
         }
         var xhr = new XMLHttpRequest()
         xhr.open('POST', 'upload')
-        xhr.upload.onprogress = incrementProgress 
+        xhr.addEventListener('progress', incrementProgress)
         xhr.addEventListener('load', finishedUpload)
         xhr.addEventListener('error', finishedUpload)
         xhr.box = createFileBox(file, xhr)
