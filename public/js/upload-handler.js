@@ -129,7 +129,7 @@ function uploadFile(el) {
         }
         var xhr = new XMLHttpRequest()
         xhr.open('POST', 'upload')
-        xhr.onprogress = incrementProgress 
+        xhr.upload.onprogress = incrementProgress 
         xhr.addEventListener('load', finishedUpload)
         xhr.addEventListener('error', finishedUpload)
         xhr.box = createFileBox(file, xhr)
