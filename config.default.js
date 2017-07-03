@@ -1,6 +1,11 @@
 var config = {
     // how many uploads allowed per ms
-    upload_delay_ms: 2000,
+    limits: {
+        window: 2000,
+        max_per_window: 3,
+    },
+    // if server is behind something like nginx
+    // for forwarded for headers
     reverse_proxied: false,
     storage: {
         // 10MiB
@@ -22,7 +27,7 @@ var config = {
         nick: 'ImageIRC_',
         tls: true,
         nickserv_pass: '',
-        channels: ['#prussian'],
+        channels: ['#prussian', '#ghetty'],
     },
 }
 

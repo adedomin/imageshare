@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="ImgIRC - send images to irc">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.2/css/bulma.min.css" crossorigin="anonymous">
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <title>ImageIRC</title>
+    <style>
+    #file-field {
+        height: 100px;
+    }
+    html {
+        background-color: #f5f5f5;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="hero is-primary" id="banner-color">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Share Images with IRC
+          </h1>
+          <h2 class="subtitle" id="status-mesg">
+            Drag your files anywhere or use the button
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="block" id="channel-list">
+        </div>
+        <div class="field">
+          <p class="control">
+            <input class="input" type="text" placeholder="caption" id="caption-input">
+          </p>
+        </div>
+        <div class="field">
+          <p class="control">
+            <input id="file-field" class="input" multiple type="file">
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-multiline is-gapless" id="uploads">
+    </div>
+    <div class="footer">
+      <div class="container is-fluid">
+        <div class="content has-text-centered">
+          <p class="is-center">
+          <strong><a href="https://github.com/GeneralUnRest/imageshare-irc">ImageIRC</a></strong> by prussian on Rizon.
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="js/upload-handler.js"></script>
+  </body>
+</html>

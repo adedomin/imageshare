@@ -44,4 +44,6 @@ if (argv._[0] == 'init') {
 }
 
 if (!argv.c) argv.c = configpath
+argv.c = path.resolve(argv.c)
+
 require(__dirname+'/../index')(argv)

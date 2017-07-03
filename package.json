@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "busboy": "^0.2.14",
+    "choo": "^5.6.2",
     "dompurify": "^0.8.5",
     "express": "^4.14.1",
     "express-rate-limit": "^2.6.0",

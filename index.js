@@ -30,7 +30,9 @@ module.exports = (argv) => {
         irc = ircClient(config),
         web = new Web(config, storage)
 
-    web.on('new', (channel, msg) => {
-        irc.say(channel, msg)
+    web.on('new', (channels, msg) => {
+        channels.forEach(channel => {
+            irc.say(channel, msg)
+        })
     })
 }
