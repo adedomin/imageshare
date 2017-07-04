@@ -78,11 +78,11 @@ function createFileBox(file, xhr) {
     box.classList.add('column')
     box.classList.add('is-3')
     box.classList.add('has-text-centered')
+    box.style.padding='5px'
 
     var url = document.createElement('a')
     url.href = ''
     url.textContent = `Uploading ${file.name}...`
-
     box.appendChild(url)
 
     xhr.imageUrl = url
@@ -104,7 +104,7 @@ function finishedUpload(el) {
     }
 
     if (xhr.status != 200 || res.status == 'error') {
-        box.parentNode.removeChild(box) 
+        if (box && box.parentNode) box.parentNode.removeChild(box) 
         return setFailBanner(res.msg || 'unknown error')
     }
 
@@ -139,6 +139,7 @@ function uploadFile(el) {
         var xhr = new XMLHttpRequest()
         xhr.open('POST', 'upload')
         xhr.upload.addEventListener('progress', incrementProgress)
+//        xhr.upload.addEventListener('error', finishedUpload)
         xhr.addEventListener('load', finishedUpload)
         xhr.addEventListener('error', finishedUpload)
         xhr.box = createFileBox(file, xhr)
