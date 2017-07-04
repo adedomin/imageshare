@@ -129,27 +129,45 @@ function incrementProgress(el) {
     }
 }
 
+function handleFile(file) {
+    if (file.type.indexOf('image') != 0 &&
+        file.type.indexOf('video') != 0 ) {
+
+        return setFailBanner('You can only upload images or videos')
+    }
+
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', 'upload')
+    xhr.upload.addEventListener('progress', incrementProgress)
+    // xhr.upload.addEventListener('error', finishedUpload)
+    xhr.addEventListener('load', finishedUpload)
+    xhr.addEventListener('error', finishedUpload)
+    xhr.box = createFileBox(file, xhr)
+
+    var form = new FormData()
+    form.append('caption', caption)
+    form.append('channel', selectedChannels.join(','))
+    form.append('file', file)
+    xhr.send(form)
+
+}
+
 function uploadFile(el) {
-    Array.prototype.forEach.call(el.target.files, file => {
-        if (file.type.indexOf('image') != 0 &&
-            file.type.indexOf('video') != 0 ) {
-            
-            return setFailBanner('You can only upload images or videos')
-        }
-        var xhr = new XMLHttpRequest()
-        xhr.open('POST', 'upload')
-        xhr.upload.addEventListener('progress', incrementProgress)
-//        xhr.upload.addEventListener('error', finishedUpload)
-        xhr.addEventListener('load', finishedUpload)
-        xhr.addEventListener('error', finishedUpload)
-        xhr.box = createFileBox(file, xhr)
-        
-        var form = new FormData()
-        form.append('caption', caption)
-        form.append('channel', selectedChannels.join(','))
-        form.append('file', file)
-        xhr.send(form)
-    })
+    Array.prototype.forEach.call(el.target.files, handleFile)
+}
+
+function dropHandle(el) {
+    el.preventDefault()
+    var data = el.dataTransfer
+    if (data.files) Array.prototype.forEach.call(data.files, handleFile)
+}
+
+function dragover(el) {
+    el.preventDefault()
+}
+
+function dragend(ev) {
+    ev.dataTransfer.clearData()
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -172,4 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
     xhr.send()
     document.getElementById('caption-input').onchange = modifyCaption
     document.getElementById('file').onchange = uploadFile
+
+    var dropzone = document.getElementById('dropzone')
+    dropzone.ondrop = dropHandle
+    dropzone.ondragover = dragover
+    dropzone.ondragend = dragend
 })

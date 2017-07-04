@@ -27,7 +27,7 @@ var config = {
         nick: 'ImageIRC_',
         tls: true,
         nickserv_pass: '',
-        channels: ['#prussian', '#ghetty'],
+        channels: ['#prussian'],
     },
 }
 
