@@ -19,7 +19,8 @@ var selectedChannels = [],
     banner = document.getElementById('banner-color'),
     statusMsg = document.getElementById('status-mesg'),
     files = document.getElementById('file'),
-    dropzone = document.getElementById('dropzone')
+    dropzone = document.getElementById('dropzone'),
+    submit = document.getElementById('submit')
  
 
 function setInfo(message) {
@@ -158,17 +159,21 @@ function handleFile(file) {
 
 function changeFileLabel(el) {
     dropzone.innerHTML = `Selected (${el.target.files.length})`
+    if (el.target.files.length > 0)
+        submit.disabled = false
 }
 
 function uploadFile(el) {
     setInfo('Uploading...')
     Array.prototype.forEach.call(el.files, handleFile)
+    submit.disabled = true
 }
 
 function dropHandle(el) {
     el.preventDefault()
     var data = el.dataTransfer
     if (data.files) Array.prototype.forEach.call(data.files, handleFile)
+    submit.disabled = true
 }
 
 function dragover(el) {
@@ -203,6 +208,5 @@ document.addEventListener('DOMContentLoaded', () => {
     dropzone.ondrop = dropHandle
     dropzone.ondragover = dragover
     dropzone.ondragend = dragend
-    var submit = document.getElementById('submit')
     submit.onclick = uploadFile.bind(null, files)
 })
