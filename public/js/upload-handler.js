@@ -17,7 +17,9 @@
 var selectedChannels = [],
     caption = '',
     banner = document.getElementById('banner-color'),
-    statusMsg = document.getElementById('status-mesg')
+    statusMsg = document.getElementById('status-mesg'),
+    files = document.getElementById('file'),
+    dropzone = document.getElementById('dropzone')
  
 
 function setInfo(message) {
@@ -113,6 +115,8 @@ function finishedUpload(el) {
     setSuccessBanner('Successfully Uploaded')
     document.getElementById('uploads')
         .appendChild(xhr.box)
+
+    dropzone.innerHTML = 'Select or Drop Files'
 }
 
 var movingDotPos = -1
@@ -122,10 +126,10 @@ function incrementProgress(el) {
     dots[movingDotPos] = 'o'
 
     if (el.lengthComputable) {
-        setInfo(`Uploading ${dots.join('')} ${Math.floor((el.loaded / el.total)*100)}%`)
+        dropzone.innerHTML = `${dots.join('')} ${Math.floor((el.loaded / el.total)*100)}%`
     }
     else {
-        setInfo(`Uploading ${dots.join('')}`)
+        dropzone.innerHTML = `${dots.join('')}`
     }
 }
 
@@ -152,8 +156,13 @@ function handleFile(file) {
 
 }
 
+function changeFileLabel(el) {
+    dropzone.innerHTML = `Selected (${el.target.files.length})`
+}
+
 function uploadFile(el) {
-    Array.prototype.forEach.call(el.target.files, handleFile)
+    setInfo('Uploading...')
+    Array.prototype.forEach.call(el.files, handleFile)
 }
 
 function dropHandle(el) {
@@ -189,10 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     xhr.send()
     document.getElementById('caption-input').onchange = modifyCaption
-    document.getElementById('file').onchange = uploadFile
+    files.onchange = changeFileLabel
 
-    var dropzone = document.getElementById('dropzone')
     dropzone.ondrop = dropHandle
     dropzone.ondragover = dragover
     dropzone.ondragend = dragend
+    var submit = document.getElementById('submit')
+    submit.onclick = uploadFile.bind(null, files)
 })
