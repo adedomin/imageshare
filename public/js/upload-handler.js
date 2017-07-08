@@ -94,6 +94,8 @@ function createFileBox(file, xhr) {
 }
 
 function finishedUpload(el) {
+    dropzone.innerHTML = 'Select or Drop Files'
+
     var xhr = el.target
     var box = xhr.box
     var url = xhr.imageUrl
@@ -116,8 +118,6 @@ function finishedUpload(el) {
     setSuccessBanner('Successfully Uploaded')
     document.getElementById('uploads')
         .appendChild(xhr.box)
-
-    dropzone.innerHTML = 'Select or Drop Files'
 }
 
 var movingDotPos = -1
@@ -138,6 +138,7 @@ function handleFile(file) {
     if (file.type.indexOf('image') != 0 &&
         file.type.indexOf('video') != 0 ) {
 
+        dropzone.innerHTML = 'Select or Drop Files'
         return setFailBanner('You can only upload images or videos')
     }
 

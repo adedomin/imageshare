@@ -17,10 +17,12 @@ var config = {
         // svg's are a bit of a mess to do safely
         disable_svg: true,
     },
-    port: 5657,
-    interface: null, // leave as null to bind to all
-    // for help text, lets users know where they can upload images
-    help_url: null,
+    web: {
+        port: 5657,
+        interface: null, // leave as null to bind to all
+        // for help text, lets users know where they can upload images
+        help_url: null,
+    },
     irc: {
         server: 'irc.rizon.net',
         port: 6697,
