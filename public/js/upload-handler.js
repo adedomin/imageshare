@@ -20,7 +20,8 @@ var selectedChannels = [],
     statusMsg = document.getElementById('status-mesg'),
     files = document.getElementById('file'),
     dropzone = document.getElementById('dropzone'),
-    submit = document.getElementById('submit')
+    submit = document.getElementById('submit'),
+    captionInput = document.getElementById('caption-input')
  
 
 function setInfo(message) {
@@ -203,8 +204,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     xhr.send()
-    document.getElementById('caption-input').onchange = modifyCaption
+
     files.onchange = changeFileLabel
+
+    captionInput.onchange = modifyCaption
+    captionInput.onkeydown = (el) => {
+        if (el.keyCode != 13) return
+        caption = el.target.value
+        uploadFile(files)
+    }
 
     dropzone.ondrop = dropHandle
     dropzone.ondragover = dragover
