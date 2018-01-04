@@ -15,7 +15,7 @@ var config = {
         // number of files to retain
         file_lim: 100,
         // svg's are a bit of a mess to do safely
-        disable_svg: true,
+        disable_svg: false,
     },
     web: {
         port: 5657,
