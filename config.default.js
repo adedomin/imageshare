@@ -30,6 +30,8 @@ var config = {
         tls: true,
         nickserv_pass: '',
         channels: ['#prussian'],
+        // file to persist invites to
+        invite_file: '/tmp/imgirc-invites.json',
     },
 }
 

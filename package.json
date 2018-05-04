@@ -1,6 +1,6 @@
 {
   "name": "image-irc",
-  "version": "3.2.0-newdep",
+  "version": "3.3.0-invitefile",
   "description": "upload images, post to irc",
   "main": "index.js",
   "bin": {
