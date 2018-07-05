@@ -1,4 +1,5 @@
-var config = {
+'use strict';
+const config = {
     // how many uploads allowed per ms
     limits: {
         window: 2000,
@@ -33,6 +34,6 @@ var config = {
         // file to persist invites to
         invite_file: '/tmp/imgirc-invites.json',
     },
-}
+};
 
-module.exports = config
+module.exports = config;

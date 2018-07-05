@@ -14,8 +14,9 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+'use strict';
 
-var argv = require('yargs')
+var { argv } = require('yargs')
     .usage('usage: $0 [init] [-c --config] config_path')
     .command('init [path]', 'create default configuration in home folder or optional path')
     .example('$0 init', 'write default config to home folder as .img-irc.js or as .config/imageshare-irc.js if XDG_CONFIG_HOME is defined')
@@ -23,27 +24,26 @@ var argv = require('yargs')
     .describe('c', 'config path')
     .alias('c', 'config')
     .help('h')
-    .alias('h', 'help')
-    .argv
+    .alias('h', 'help');
 
-var fs = require('fs'), 
+var fs = require('fs'),
     path = require('path'),
-    configpath = ''
+    configpath = '';
 
 if (process.env.XDG_CONFIG_HOME)
-    configpath = path.join(process.env.XDG_CONFIG_HOME, 'imageshare-irc.js')
+    configpath = path.join(process.env.XDG_CONFIG_HOME, 'imageshare-irc.js');
 else if (process.env.HOME)
-    configpath = path.join(process.env.HOME, '.img-irc.js')
+    configpath = path.join(process.env.HOME, '.img-irc.js');
 
 if (argv._[0] == 'init') {
     return fs.createReadStream(
         path.join(__dirname, '../', 'config.default.js')
     ).pipe(fs.createWriteStream(
         argv._[1] || configpath
-    ))
+    ));
 }
 
-if (!argv.c) argv.c = configpath
-argv.c = path.resolve(argv.c)
+if (!argv.c) argv.c = configpath;
+argv.c = path.resolve(argv.c);
 
-require(__dirname+'/../index')(argv)
+require(`${__dirname}/../index`)(argv);

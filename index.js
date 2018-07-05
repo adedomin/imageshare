@@ -13,26 +13,27 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+'use strict';
 
 var Storage = require('./lib/storage.js'),
     ircClient = require('./lib/irc.js'),
-    Web = require('./lib/web.js')
+    Web = require('./lib/web.js');
 
 module.exports = (argv) => {
 
-    var config = require(argv.c)
-    if (!config.storage.dir) 
-        throw 'You must define a storage directory'
+    var config = require(argv.c);
+    if (!config.storage.dir)
+        throw 'You must define a storage directory';
     var storage = new Storage(
             config.storage.file_lim || 100,
             config.storage.dir
         ),
         irc = ircClient(config),
-        web = new Web(config, storage)
+        web = new Web(config, storage);
 
     web.on('new', (channels, msg) => {
         channels.forEach(channel => {
-            irc.say(channel, msg)
-        })
-    })
-}
+            irc.say(channel, msg);
+        });
+    });
+};
