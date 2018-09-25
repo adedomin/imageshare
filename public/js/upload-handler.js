@@ -14,6 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+'use strict';
 var selectedChannels = [],
     caption = '',
     banner = document.getElementById('banner-color'),
@@ -21,117 +23,116 @@ var selectedChannels = [],
     files = document.getElementById('file'),
     dropzone = document.getElementById('dropzone'),
     submit = document.getElementById('submit'),
-    captionInput = document.getElementById('caption-input')
- 
+    captionInput = document.getElementById('caption-input');
 
 function setInfo(message) {
-    statusMsg.innerHTML = message
-    banner.classList.remove('is-success')
-    banner.classList.remove('is-danger')
-    banner.classList.add('is-primary')
+    statusMsg.innerHTML = message;
+    banner.classList.remove('is-success');
+    banner.classList.remove('is-danger');
+    banner.classList.add('is-primary');
 }
 
 function setFailBanner(message) {
-    statusMsg.innerHTML = message
-    banner.classList.remove('is-primary')
-    banner.classList.remove('is-success')
-    banner.classList.add('is-danger')
+    statusMsg.innerHTML = message;
+    banner.classList.remove('is-primary');
+    banner.classList.remove('is-success');
+    banner.classList.add('is-danger');
 }
 
 function setSuccessBanner(message) {
-    statusMsg.innerHTML = message
-    banner.classList.remove('is-danger')
-    banner.classList.remove('is-primary')
-    banner.classList.add('is-success')
+    statusMsg.innerHTML = message;
+    banner.classList.remove('is-danger');
+    banner.classList.remove('is-primary');
+    banner.classList.add('is-success');
 }
 
 function addSelected(channel) {
-    selectedChannels.push(channel)
+    selectedChannels.push(channel);
 }
 
 function removeSelected(channel) {
-    var pos = selectedChannels.indexOf(channel) 
-    if (pos < 0) return
-    selectedChannels.splice(pos, 1)
+    var pos = selectedChannels.indexOf(channel); 
+    if (pos < 0) return;
+    selectedChannels.splice(pos, 1);
 }
 
 function addChannelButton(channel) {
-    var box = document.createElement('button')
-    box.classList.add('button')
-    box.textContent = channel
+    var box = document.createElement('button');
+    box.classList.add('button');
+    box.textContent = channel;
     box.onclick = () => {
         if (selectedChannels.indexOf(channel) < 0) {
-            box.classList.add('is-info')
-            addSelected(channel)
+            box.classList.add('is-info');
+            addSelected(channel);
         }
         else {
-            box.classList.remove('is-info')
-            removeSelected(channel)
+            box.classList.remove('is-info');
+            removeSelected(channel);
         }
-    }
-    document.getElementById('channel-list').appendChild(box)
+    };
+    document.getElementById('channel-list').appendChild(box);
 }
 
 function modifyCaption(el) {
-    caption = el.target.value
+    caption = el.target.value;
 }
 
 function createFileBox(file, xhr) {
-    var box = document.createElement('div')
-    box.classList.add('box')
-    box.classList.add('column')
-    box.classList.add('is-3')
-    box.classList.add('has-text-centered')
-    box.style.padding='5px'
+    var box = document.createElement('div');
+    box.classList.add('box');
+    box.classList.add('column');
+    box.classList.add('is-3');
+    box.classList.add('has-text-centered');
+    box.style.padding='5px';
 
-    var url = document.createElement('a')
-    url.href = ''
-    url.textContent = `Uploading ${file.name}...`
-    box.appendChild(url)
+    var url = document.createElement('a');
+    url.href = '';
+    url.textContent = `Uploading ${file.name}...`;
+    box.appendChild(url);
 
-    xhr.imageUrl = url
+    xhr.imageUrl = url;
 
-    return box
+    return box;
 }
 
 function finishedUpload(el) {
-    dropzone.innerHTML = 'Select or Drop Files'
+    dropzone.innerHTML = 'Select or Drop Files';
 
-    var xhr = el.target
-    var box = xhr.box
-    var url = xhr.imageUrl
+    var xhr = el.target;
+    var box = xhr.box;
+    var url = xhr.imageUrl;
 
-    var res
+    var res;
     try {
-        res = JSON.parse(xhr.responseText)
+        res = JSON.parse(xhr.responseText);
     }
     catch (e) {
-        return setFailBanner('failed to parse upload response') 
+        return setFailBanner('failed to parse upload response'); 
     }
 
     if (xhr.status != 200 || res.status == 'error') {
-        if (box && box.parentNode) box.parentNode.removeChild(box) 
-        return setFailBanner(res.msg || 'unknown error')
+        if (box && box.parentNode) box.parentNode.removeChild(box); 
+        return setFailBanner(res.msg || 'unknown error');
     }
 
-    url.href = res.href
-    url.innerHTML = res.href
-    setSuccessBanner('Successfully Uploaded')
+    url.href = res.href;
+    url.innerHTML = res.href;
+    setSuccessBanner('Successfully Uploaded');
     document.getElementById('uploads')
-        .appendChild(xhr.box)
+        .appendChild(xhr.box);
 }
 
-var movingDotPos = -1
+var movingDotPos = -1;
 function incrementProgress(el) {
-    var dots = ['.', '.', '.', '.', '.', '.', '.']
-    movingDotPos = (movingDotPos + 1) % dots.length
-    dots[movingDotPos] = 'o'
+    var dots = ['.', '.', '.', '.', '.', '.', '.'];
+    movingDotPos = (movingDotPos + 1) % dots.length;
+    dots[movingDotPos] = 'o';
 
     if (el.lengthComputable) {
-        dropzone.innerHTML = `${dots.join('')} ${Math.floor((el.loaded / el.total)*100)}%`
+        dropzone.innerHTML = `${dots.join('')} ${Math.floor((el.loaded / el.total)*100)}%`;
     }
     else {
-        dropzone.innerHTML = `${dots.join('')}`
+        dropzone.innerHTML = `${dots.join('')}`;
     }
 }
 
@@ -139,83 +140,82 @@ function handleFile(file) {
     if (file.type.indexOf('image') != 0 &&
         file.type.indexOf('video') != 0 ) {
 
-        dropzone.innerHTML = 'Select or Drop Files'
-        return setFailBanner('You can only upload images or videos')
+        dropzone.innerHTML = 'Select or Drop Files';
+        return setFailBanner('You can only upload images or videos');
     }
 
-    var xhr = new XMLHttpRequest()
-    xhr.open('POST', 'upload')
-    xhr.upload.addEventListener('progress', incrementProgress)
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'upload');
+    xhr.upload.addEventListener('progress', incrementProgress);
     // xhr.upload.addEventListener('error', finishedUpload)
-    xhr.addEventListener('load', finishedUpload)
-    xhr.addEventListener('error', finishedUpload)
-    xhr.box = createFileBox(file, xhr)
+    xhr.addEventListener('load', finishedUpload);
+    xhr.addEventListener('error', finishedUpload);
+    xhr.box = createFileBox(file, xhr);
 
-    var form = new FormData()
-    form.append('caption', caption)
-    form.append('channel', selectedChannels.join(','))
-    form.append('file', file)
-    xhr.send(form)
+    var form = new FormData();
+    form.append('caption', caption);
+    form.append('channel', selectedChannels.join(','));
+    form.append('file', file);
+    xhr.send(form);
 
 }
 
 function changeFileLabel(el) {
-    dropzone.innerHTML = `Selected (${el.target.files.length})`
+    dropzone.innerHTML = `Selected (${el.target.files.length})`;
     if (el.target.files.length > 0)
-        submit.disabled = false
+        submit.disabled = false;
 }
 
 function uploadFile(el) {
-    setInfo('Uploading...')
-    Array.prototype.forEach.call(el.files, handleFile)
-    submit.disabled = true
+    setInfo('Uploading...');
+    Array.prototype.forEach.call(el.files, handleFile);
+    submit.disabled = true;
 }
 
 function dropHandle(el) {
-    el.preventDefault()
-    var data = el.dataTransfer
-    if (data.files) Array.prototype.forEach.call(data.files, handleFile)
-    submit.disabled = true
+    el.preventDefault();
+    var data = el.dataTransfer;
+    if (data.files) Array.prototype.forEach.call(data.files, handleFile);
+    submit.disabled = true;
 }
 
 function dragover(el) {
-    el.preventDefault()
+    el.preventDefault();
 }
 
 function dragend(ev) {
-    ev.dataTransfer.clearData()
+    ev.dataTransfer.clearData();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    var xhr = new XMLHttpRequest()
-    xhr.open('GET', 'channels')
-    xhr.onreadystatechange = () => {
-        if ( xhr.readyState == XMLHttpRequest.DONE && 
-             xhr.status === 200
-        ) {
-            try {
-                JSON.parse(xhr.responseText).forEach(channel => {
-                    addChannelButton(channel)
-                })
-            }
-            catch (e) {
-                setFailBanner('Failed to fetch channels')
-            }
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'channels');
+xhr.onreadystatechange = () => {
+    if ( xhr.readyState == XMLHttpRequest.DONE && 
+         xhr.status === 200
+    ) {
+        try {
+            JSON.parse(xhr.responseText).forEach(channel => {
+                addChannelButton(channel);
+            });
+        }
+        catch (e) {
+            setFailBanner('Failed to fetch channels');
         }
     }
-    xhr.send()
+};
+xhr.send();
 
-    files.onchange = changeFileLabel
+files.onchange = changeFileLabel;
 
-    captionInput.onchange = modifyCaption
-    captionInput.onkeydown = (el) => {
-        if (el.keyCode != 13) return
-        caption = el.target.value
-        uploadFile(files)
-    }
+captionInput.onchange = modifyCaption;
+captionInput.onkeydown = (el) => {
+    if (el.keyCode != 13) return;
+    if (submit.disabled) return;
+    caption = el.target.value;
+    uploadFile(files);
+};
 
-    dropzone.ondrop = dropHandle
-    dropzone.ondragover = dragover
-    dropzone.ondragend = dragend
-    submit.onclick = uploadFile.bind(null, files)
-})
+dropzone.ondrop = dropHandle;
+dropzone.ondragover = dragover;
+dropzone.ondragend = dragend;
+submit.onclick = uploadFile.bind(null, files);
