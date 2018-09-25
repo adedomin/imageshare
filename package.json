@@ -1,6 +1,6 @@
 {
   "name": "image-irc",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "description": "upload images, post to irc",
   "main": "index.js",
   "bin": {
@@ -16,7 +16,7 @@
     "image"
   ],
   "repository": "https://github.com/adedomin/imageshare-irc.git",
-  "author": "prussian <genunrest@gmail.com>",
+  "author": "Anthony DeDominic <adedomin@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "busboy": "^0.2.14",
