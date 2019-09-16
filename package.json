@@ -19,17 +19,13 @@
   "author": "Anthony DeDominic <adedomin@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "busboy": "^0.2.14",
-    "dompurify": "1.0.3",
-    "express": "^4.14.1",
-    "express-rate-limit": "^2.6.0",
+    "busboy": "0.3.1",
+    "express": "4.17.1",
+    "express-rate-limit": "5.0.0",
     "file-type": "7.4.0",
-    "hashids": "^1.1.1",
-    "irc-framework": "^2.8.1",
-    "is-svg": "^2.1.0",
-    "jsdom": "11.5.1",
+    "hashids": "2.0.1",
     "mime-types": "^2.1.14",
-    "read-chunk": "^2.0.0",
+    "read-chunk": "^3.2.0",
     "yargs": "10.0.3"
   },
   "devDependencies": {

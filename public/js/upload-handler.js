@@ -16,14 +16,11 @@
 
 
 'use strict';
-var selectedChannels = [],
-    caption = '',
-    banner = document.getElementById('banner-color'),
-    statusMsg = document.getElementById('status-mesg'),
-    files = document.getElementById('file'),
-    dropzone = document.getElementById('dropzone'),
-    submit = document.getElementById('submit'),
-    captionInput = document.getElementById('caption-input');
+let banner = document.getElementById('banner-color');
+let statusMsg = document.getElementById('status-mesg');
+let files = document.getElementById('file');
+let dropzone = document.getElementById('dropzone');
+let submit = document.getElementById('submit');
 
 function setInfo(message) {
     statusMsg.innerHTML = message;
@@ -46,48 +43,34 @@ function setSuccessBanner(message) {
     banner.classList.add('is-success');
 }
 
-function addSelected(channel) {
-    selectedChannels.push(channel);
-}
-
-function removeSelected(channel) {
-    var pos = selectedChannels.indexOf(channel); 
-    if (pos < 0) return;
-    selectedChannels.splice(pos, 1);
-}
-
-function addChannelButton(channel) {
-    var box = document.createElement('button');
-    box.classList.add('button');
-    box.textContent = channel;
-    box.onclick = () => {
-        if (selectedChannels.indexOf(channel) < 0) {
-            box.classList.add('is-info');
-            addSelected(channel);
-        }
-        else {
-            box.classList.remove('is-info');
-            removeSelected(channel);
-        }
-    };
-    document.getElementById('channel-list').appendChild(box);
-}
-
-function modifyCaption(el) {
-    caption = el.target.value;
-}
-
 function createFileBox(file, xhr) {
-    var box = document.createElement('div');
+    let box = document.createElement('div');
     box.classList.add('box');
     box.classList.add('column');
-    box.classList.add('is-3');
+    box.classList.add('is-4');
     box.classList.add('has-text-centered');
     box.style.padding='5px';
 
-    var url = document.createElement('a');
+    let url = document.createElement('a');
     url.href = '';
     url.textContent = `Uploading ${file.name}...`;
+    url.onclick = function(ev) {
+        ev.preventDefault();
+        let fakeInput = document.createElement('textarea');
+        fakeInput.value = ev.target.href;
+
+        document.body.appendChild(fakeInput);
+        fakeInput.select();
+
+        if (document.execCommand('copy')) {
+            setSuccessBanner('Copied URL to clipboard.');
+        }
+        else {
+            setFailBanner('Failed to copy to clipboard.');
+        }
+
+        document.body.removeChild(fakeInput);
+    };
     box.appendChild(url);
 
     xhr.imageUrl = url;
@@ -98,11 +81,12 @@ function createFileBox(file, xhr) {
 function finishedUpload(el) {
     dropzone.innerHTML = 'Select or Drop Files';
 
-    var xhr = el.target;
-    var box = xhr.box;
-    var url = xhr.imageUrl;
+    let xhr = el.target;
+    let { box } = xhr.box;
+    let url = xhr.imageUrl;
 
-    var res;
+    let res;
+
     try {
         res = JSON.parse(xhr.responseText);
     }
@@ -112,7 +96,7 @@ function finishedUpload(el) {
 
     if (xhr.status != 200 || res.status == 'error') {
         if (box && box.parentNode) box.parentNode.removeChild(box); 
-        return setFailBanner(res.msg || 'unknown error');
+        return setFailBanner(res.message || 'unknown error');
     }
 
     url.href = res.href;
@@ -122,9 +106,9 @@ function finishedUpload(el) {
         .appendChild(xhr.box);
 }
 
-var movingDotPos = -1;
+let movingDotPos = -1;
 function incrementProgress(el) {
-    var dots = ['.', '.', '.', '.', '.', '.', '.'];
+    let dots = ['.', '.', '.', '.', '.', '.', '.'];
     movingDotPos = (movingDotPos + 1) % dots.length;
     dots[movingDotPos] = 'o';
 
@@ -144,7 +128,7 @@ function handleFile(file) {
         return setFailBanner('You can only upload images or videos');
     }
 
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('POST', 'upload');
     xhr.upload.addEventListener('progress', incrementProgress);
     // xhr.upload.addEventListener('error', finishedUpload)
@@ -152,9 +136,7 @@ function handleFile(file) {
     xhr.addEventListener('error', finishedUpload);
     xhr.box = createFileBox(file, xhr);
 
-    var form = new FormData();
-    form.append('caption', caption);
-    form.append('channel', selectedChannels.join(','));
+    let form = new FormData();
     form.append('file', file);
     xhr.send(form);
 
@@ -174,7 +156,7 @@ function uploadFile(el) {
 
 function dropHandle(el) {
     el.preventDefault();
-    var data = el.dataTransfer;
+    let data = el.dataTransfer;
     if (data.files) Array.prototype.forEach.call(data.files, handleFile);
     submit.disabled = true;
 }
@@ -187,33 +169,7 @@ function dragend(ev) {
     ev.dataTransfer.clearData();
 }
 
-var xhr = new XMLHttpRequest();
-xhr.open('GET', 'channels');
-xhr.onreadystatechange = () => {
-    if ( xhr.readyState == XMLHttpRequest.DONE && 
-         xhr.status === 200
-    ) {
-        try {
-            JSON.parse(xhr.responseText).forEach(channel => {
-                addChannelButton(channel);
-            });
-        }
-        catch (e) {
-            setFailBanner('Failed to fetch channels');
-        }
-    }
-};
-xhr.send();
-
 files.onchange = changeFileLabel;
-
-captionInput.onchange = modifyCaption;
-captionInput.onkeydown = (el) => {
-    if (el.keyCode != 13) return;
-    if (submit.disabled) return;
-    caption = el.target.value;
-    uploadFile(files);
-};
 
 dropzone.ondrop = dropHandle;
 dropzone.ondragover = dragover;

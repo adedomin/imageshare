@@ -15,32 +15,4 @@
  */
 'use strict';
 
-let Storage = require('./lib/storage.js');
-let ircClient = require('./lib/irc.js');
 let Web = require('./lib/web.js');
-
-module.exports = (argv) => {
-
-    let config = require(argv.c);
-    if (!config.storage.dir)
-        throw 'You must define a storage directory';
-    let storage = new Storage(
-        config.storage.file_lim || 100,
-        config.storage.dir
-    );
-    let irc;
-    if (config.irc && !config.irc.disabled) {
-        irc = ircClient(config);
-    }
-    else {
-        irc = { say() {} };
-        config.irc.channels = [];
-    }
-    let web = new Web(config, storage);
-
-    web.on('new', (channels, msg) => {
-        channels.forEach(channel => {
-            irc.say(channel, msg);
-        });
-    });
-};

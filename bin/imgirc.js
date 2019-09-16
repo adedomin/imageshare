@@ -34,6 +34,8 @@ if (process.env.XDG_CONFIG_HOME)
     configpath = path.join(process.env.XDG_CONFIG_HOME, 'imageshare-irc.js');
 else if (process.env.HOME)
     configpath = path.join(process.env.HOME, '.img-irc.js');
+else if (process.env.CONFIG_PATH)
+    configpath = process.env.CONFIG_PATH;
 
 if (argv._[0] == 'init') {
     return fs.createReadStream(
@@ -46,4 +48,6 @@ if (argv._[0] == 'init') {
 if (!argv.c) argv.c = configpath;
 argv.c = path.resolve(argv.c);
 
-require(`${__dirname}/../index`)(argv);
+process.env.CONFIG_PATH = argv.c;
+
+require(`${__dirname}/../index`);
