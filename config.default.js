@@ -5,9 +5,6 @@ const config = {
         window: 2000,
         maxPerWindow: 3,
     },
-    // if server is behind something like nginx
-    // for forwarded for headers
-    reverse_proxied: false,
     storage: {
         // 10MiB
         maxSize: (1024*1024)*10,
@@ -19,15 +16,9 @@ const config = {
     web: {
         port: 5657,
         interface: null, // leave as null to bind to all
-        // for help text, lets users know where they can upload images
-        helpUrl: null,
-    },
-    irc: {
-        server: 'irc.rizon.net',
-        port: 6697,
-        nick: 'ImageIRC_',
-        tls: true,
-        nickservPass: '',
+        // if server is behind something like nginx
+        // for forwarded for headers
+        reverseProxied: false,
     },
 };
 
