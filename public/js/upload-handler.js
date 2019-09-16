@@ -43,21 +43,52 @@ function setSuccessBanner(message) {
     banner.classList.add('is-success');
 }
 
-function createFileBox(file, xhr) {
-    let box = document.createElement('div');
-    box.classList.add('box');
-    box.classList.add('column');
-    box.classList.add('is-4');
-    box.classList.add('has-text-centered');
-    box.style.padding='5px';
+function createImageFigure(file) {
+    let imgEl = document.createElement('img');
+    imgEl.src = URL.createObjectURL(file);
+    
+    let figureEl = document.createElement('figure');
+    figureEl.classList.add('image');
+    figureEl.classList.add('is-128x128');
+    figureEl.appendChild(imgEl);
 
+    let box = document.createElement('div');
+    box.classList.add('media-left');
+    box.appendChild(figureEl);
+    
+    return box;
+}
+
+function createFileBox(file, xhr) {
     let url = document.createElement('a');
     url.href = '';
     url.textContent = `Uploading ${file.name}...`;
-    url.onclick = function(ev) {
+    //url.onclick = function(ev) {
+    //    ev.preventDefault();
+    //    let fakeInput = document.createElement('textarea');
+    //    fakeInput.value = ev.target.href;
+
+    //    document.body.appendChild(fakeInput);
+    //    fakeInput.select();
+
+    //    if (document.execCommand('copy')) {
+    //        setSuccessBanner('Copied URL to clipboard.');
+    //    }
+    //    else {
+    //        setFailBanner('Failed to copy to clipboard.');
+    //    }
+
+    //    document.body.removeChild(fakeInput);
+    //};
+
+    let copyUrlButton = document.createElement('button');
+    copyUrlButton.classList.add('button');
+    copyUrlButton.textContent = 'Copy to clipboard';
+    copyUrlButton.onclick = function(ev) {
         ev.preventDefault();
+
         let fakeInput = document.createElement('textarea');
-        fakeInput.value = ev.target.href;
+        fakeInput.value = url.href;
 
         document.body.appendChild(fakeInput);
         fakeInput.select();
@@ -71,7 +102,32 @@ function createFileBox(file, xhr) {
 
         document.body.removeChild(fakeInput);
     };
-    box.appendChild(url);
+
+    let contentBox = document.createElement('p');
+    contentBox.classList.add('has-text-centered');
+    contentBox.appendChild(url);
+    contentBox.appendChild(document.createElement('br'));
+    contentBox.appendChild(copyUrlButton);
+
+    let contentContentBox = document.createElement('div');
+    contentContentBox.classList.add('content');
+    contentContentBox.appendChild(contentBox);
+
+    let contentContainer = document.createElement('div');
+    contentContainer.classList.add('media-content');
+    contentContainer.appendChild(contentContentBox);
+
+    let mediaContainer = document.createElement('div');
+    mediaContainer.classList.add('media');
+    mediaContainer.appendChild(createImageFigure(file));
+    mediaContainer.appendChild(contentContainer);
+
+    let box = document.createElement('div');
+    box.classList.add('box');
+    box.classList.add('column');
+    box.classList.add('is-4');
+    box.style.padding='5px';
+    box.appendChild(mediaContainer);
 
     xhr.imageUrl = url;
 
