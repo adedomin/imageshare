@@ -50,6 +50,7 @@ function createImageFigure(file) {
     let figureEl = document.createElement('figure');
     figureEl.classList.add('image');
     figureEl.classList.add('is-128x128');
+    figureEl.style.overflow = 'hidden';
     figureEl.appendChild(imgEl);
 
     let box = document.createElement('div');
@@ -63,29 +64,24 @@ function createFileBox(file, xhr) {
     let url = document.createElement('a');
     url.href = '';
     url.textContent = `Uploading ${file.name}...`;
-    //url.onclick = function(ev) {
-    //    ev.preventDefault();
-    //    let fakeInput = document.createElement('textarea');
-    //    fakeInput.value = ev.target.href;
-
-    //    document.body.appendChild(fakeInput);
-    //    fakeInput.select();
-
-    //    if (document.execCommand('copy')) {
-    //        setSuccessBanner('Copied URL to clipboard.');
-    //    }
-    //    else {
-    //        setFailBanner('Failed to copy to clipboard.');
-    //    }
-
-    //    document.body.removeChild(fakeInput);
-    //};
 
     let copyUrlButton = document.createElement('button');
     copyUrlButton.classList.add('button');
     copyUrlButton.textContent = 'Copy to clipboard';
+    copyUrlButton.dataset.wasClicked = false;
     copyUrlButton.onclick = function(ev) {
         ev.preventDefault();
+
+        // unset any existing clicked button
+        document.querySelectorAll('button[data-was-clicked="true"]')
+            .forEach(button => {
+                button.textContent = 'Copy to clipboard';
+                button.dataset.wasClicked = false;
+                button.classList.remove('is-success');
+                button.classList.remove('is-danger');
+            });
+        // indicate this button was clicked
+        ev.target.dataset.wasClicked = true;
 
         let fakeInput = document.createElement('textarea');
         fakeInput.value = url.href;
@@ -94,10 +90,12 @@ function createFileBox(file, xhr) {
         fakeInput.select();
 
         if (document.execCommand('copy')) {
-            setSuccessBanner('Copied URL to clipboard.');
+            ev.target.classList.add('is-success');
+            ev.target.textContent = 'Copied';
         }
         else {
-            setFailBanner('Failed to copy to clipboard.');
+            ev.target.classList.add('is-danger');
+            ev.target.textContent = 'Failed to copy to clipboard';
         }
 
         document.body.removeChild(fakeInput);
@@ -125,7 +123,7 @@ function createFileBox(file, xhr) {
     let box = document.createElement('div');
     box.classList.add('box');
     box.classList.add('column');
-    box.classList.add('is-4');
+    box.classList.add('is-6');
     box.style.padding='5px';
     box.appendChild(mediaContainer);
 
