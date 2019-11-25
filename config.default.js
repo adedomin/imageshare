@@ -16,6 +16,8 @@ const config = {
     web: {
         port: 5657,
         interface: null, // leave as null to bind to all
+        // for irc help text (deprecated)
+        helpUrl: 'http://localhost:5657',
         // if server is behind something like nginx
         // for forwarded for headers
         reverseProxied: false,
