@@ -1,17 +1,16 @@
 {
-  "name": "image-irc",
-  "version": "4.1.1",
-  "description": "upload images, post to irc",
+  "name": "image-share",
+  "version": "2021.02.13",
+  "description": "upload images and text files",
   "main": "index.js",
   "bin": {
-    "imgirc": "./bin/imgirc.js"
+    "imgshare": "./bin/imgshare.js"
   },
   "scripts": {
     "update-bulma": "cp node_modules/bulma/css/bulma.css public/css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "irc",
     "sharing",
     "image"
   ],
@@ -21,12 +20,10 @@
   "dependencies": {
     "busboy": "0.3.1",
     "express": "4.17.1",
-    "express-rate-limit": "5.0.0",
-    "file-type": "7.4.0",
-    "hashids": "2.0.1",
-    "mime-types": "^2.1.14",
-    "read-chunk": "^3.2.0",
-    "yargs": "10.0.3"
+    "express-slow-down": "^1.4.0",
+    "file-type": "16.2.0",
+    "hashids": "2.2.8",
+    "mime-types": "^2.1.14"
   },
   "devDependencies": {
     "bulma": "^0.4.3"
