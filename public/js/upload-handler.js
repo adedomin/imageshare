@@ -44,8 +44,23 @@ function setSuccessBanner(message) {
 }
 
 function createImageFigure(file) {
-    let imgEl = document.createElement('img');
+    const isVideo = file.type.indexOf('video') == 0;
+    let imgEl = document.createElement(
+        isVideo ? 'video' : 'img',
+    );
     imgEl.src = URL.createObjectURL(file);
+    if (isVideo) {
+        imgEl.muted = true;
+        imgEl.loop = true;
+        imgEl.addEventListener('click', function(e) {
+            if (e.target.paused) {
+                e.target.play();
+            }
+            else {
+                e.target.pause();
+            }
+        });
+    }
     
     let figureEl = document.createElement('figure');
     figureEl.classList.add('image');
