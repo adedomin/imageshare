@@ -1,0 +1,19 @@
+[Unit]
+Description=Imageshare and pastebin service on ghetty.space
+
+[Service]
+User=imgirc
+# the shared web services group
+# Group=web-stuff
+# you can comment this out if you aren't using unix sockets
+RuntimeDirectory=imageshare
+# needed so nginx or other rev proxy can connect to unix socket, if you're using that.
+RuntimeDirectoryMode=0770
+UMask=0002
+ExecStart=/usr/bin/imgshare -c /etc/imageshare.conf.js
+WorkingDirectory=~
+Restart=on-failure
+RestartSec=5min
+
+[Install]
+WantedBy=multi-user.target

@@ -26,8 +26,8 @@ const config = {
         // If defined (not undefined) will listen on a unix socket instead
         // port and interface have no effect. comment out to disable this.
         // if using systemd, you can define RuntimeDirectory=imageshare and use
-        //unix: `${process.env['RUNTIME_DIRECTORY']}/imageshare.socket`,
-        unix: './imageshare.socket',
+        // unix: `${process.env['RUNTIME_DIRECTORY']}/imageshare.socket`,
+        // unix: './imageshare.socket',
         port: 5657,
         interface: null, // leave as null to bind to all
         // if server is behind something like nginx
