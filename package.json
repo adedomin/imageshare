@@ -21,7 +21,7 @@
     "busboy": "0.3.1",
     "express": "4.17.1",
     "express-slow-down": "^1.4.0",
-    "file-type": "16.2.0",
+    "file-type": "16.5.4",
     "hashids": "2.2.8",
     "mime-types": "^2.1.14"
   },
