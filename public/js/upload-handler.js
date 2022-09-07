@@ -189,6 +189,19 @@ function incrementProgress(el) {
     }
 }
 
+function handlePaste(file) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', 'upload');
+    xhr.upload.addEventListener('progress', incrementProgress);
+    // xhr.upload.addEventListener('error', finishedUpload)
+    xhr.addEventListener('load', finishedUpload);
+    xhr.addEventListener('error', finishedUpload);
+    xhr.box = createFileBox(file, xhr);
+    let form = new FormData();
+    form.append('file', file);
+    xhr.send(form);
+}
+
 function handleFile(file) {
     if (file.type.indexOf('image') != 0 &&
         file.type.indexOf('video') != 0 ) {
