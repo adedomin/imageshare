@@ -8,7 +8,10 @@
   },
   "scripts": {
     "update-bulma": "cp node_modules/bulma/css/bulma.css public/css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sync-package-lock": "rm -- ./package-lock.json; synp --source-file ./yarn.lock",
+    "patch-dicer": "patch -p1 < ./contrib/CVE-2022-24434.patch",
+    "postinstall": "npm run patch-dicer"
   },
   "keywords": [
     "sharing",
@@ -26,6 +29,7 @@
     "mime-types": "^2.1.14"
   },
   "devDependencies": {
-    "bulma": "^0.4.3"
+    "bulma": "^0.4.3",
+    "synp": "1.9.10"
   }
 }
