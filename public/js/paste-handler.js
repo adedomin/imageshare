@@ -23,7 +23,6 @@ document.onpaste = function (event) {
         if (item.kind === 'file') {
             var blob = item.getAsFile();
             var reader = new FileReader();
-            var file = document.getElementById('file');
             reader.onload = function (event) {
                 handlePaste(blob);
             }; 
